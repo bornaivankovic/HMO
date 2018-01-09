@@ -1,6 +1,9 @@
 from test import Test
 from machine import Machine
 from resource import Resource
+from simulation import Simulation
+from time import time
+from collections import deque
 
 instances=["ts"+str(i)+".txt" for i in range(1,11)]
 with file(instances[0],"r") as f:
@@ -26,4 +29,12 @@ for i in range(i,i+n_resources):
     split=lines[i].split("( ")[1][:-2].split(", ")
     resource=Resource(eval(split[0]),eval(split[1]))
     resources.append(resource)
+
+start=time()
+sim=Simulation(machines,resources)
+a=sim.run_simulation(deque(tests))
+print a,time()-start
+
+
+
 
