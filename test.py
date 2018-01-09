@@ -13,6 +13,10 @@ class Test():
             return True
         else: return False
     
+    
+    """
+    slower but supports multiple resources of the same type
+    """
     def resources_available(self,resources):
         if not self.resources:
             return True
@@ -22,6 +26,21 @@ class Test():
             if cur_res.current+len(filter(lambda x: x==cur_res.name,self.resources))<=cur_res.n:
                 cnt+=1
         if cnt==len(set(self.resources)):
+            return True
+        else: return False
+
+    """
+    faster but assumes only one resource of each type is available
+    """
+    def resources_available2(self,resources):
+        if not self.resources:
+            return True
+        cnt=0
+        for i in self.resources:
+            for j in resources:
+                if i==j.name and j.current<j.n:
+                    cnt+=1
+        if cnt==len(self.resources):
             return True
         else: return False
 

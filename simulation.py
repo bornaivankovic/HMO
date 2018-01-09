@@ -21,7 +21,9 @@ class Simulation():
                     cur_test=tests.popleft()
                 except:
                     cur_test=None
-                if i.running_test==None and cur_test!=None and cur_test.can_run(i) and cur_test.resources_available(self.resources):
+                if cur_test==None and i.running_test==None:
+                    continue
+                if i.running_test==None and cur_test!=None and cur_test.can_run(i) and cur_test.resources_available2(self.resources):
                     i.running_test=cur_test
                     for j in cur_test.resources:
                         self.resources[self.resources.index(j)].current+=1

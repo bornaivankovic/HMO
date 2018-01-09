@@ -4,6 +4,7 @@ from resource import Resource
 from simulation import Simulation
 from time import time
 from collections import deque
+from helpers import generate_neighbourhood,is_tabu
 
 instances=["ts"+str(i)+".txt" for i in range(1,11)]
 with file(instances[0],"r") as f:
@@ -30,11 +31,33 @@ for i in range(i,i+n_resources):
     resource=Resource(eval(split[0]),eval(split[1]))
     resources.append(resource)
 
-start=time()
 sim=Simulation(machines,resources)
-a=sim.run_simulation(deque(tests))
-print a,time()-start
 
+best_candidate=range(len(tests))
+best_fitness=sim.run_simulation(deque([tests[x] for x in best_candidate]))
+tabu_list=deque()
+max_tabu_size=5
+start=time()
+neighbourhood_size=20
 
+time_limit=60
+while time()-start<time_limit:
+    neighbourhood=generate_neighbourhood(best_candidate,neighbourhood_size)
+    remove=[]
+    for i in neighbourhood:
+        if is_tabu(tabu_list,i,5):
+            remove.append(i)
+    for i in remove:
+        neighbourhood.remove(i)
+    fitness_list=[]
+    for i in neighbourhood:
+        fitness_list.append(sim.run_simulation(deque([tests[x] for x in i])))
+    if best_fitness>min(fitness_list):
+        best_fitness=min(fitness_list)
+        best_candidate=neighbourhood[fitness_list.index(best_fitness)]
+    tabu_list.append(best_candidate)
+    if len(tabu_list)>max_tabu_size:
+        tabu_list.popleft()
+    print best_candidate,best_fitness
 
 
