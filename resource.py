@@ -1,4 +1,4 @@
 class Resource():
-    def __init__(self,name,n):
-        self.name=name
-        self.n=n
+    def __init__(self, name):
+        self.name = name
+        self.available_at = 0
