@@ -5,7 +5,7 @@ from greedy import Greedy
 from random import randint
 
 instances = ["ts" + str(i) + ".txt" for i in range(1, 11)]
-with file(instances[7], "r") as f:
+with file(instances[1], "r") as f:
     lines = [x.strip() for x in f.readlines()]
 
 n_tests = int(lines[1].split(": ")[1])
@@ -44,7 +44,7 @@ def generate_test_queue(tests):
     return test_queue
 
 times = []
-for i in range(2000):
+for i in range(1):
     test_queue = generate_test_queue(tests)
     simulation = Greedy(machines, resources, test_queue)
     times.append(simulation.start(i))
