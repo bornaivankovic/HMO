@@ -5,25 +5,25 @@ class Greedy():
         self.resources = resources
         self.tests = tests
 
-    def start(self, i):
+    def start(self):
         self.reset()
-        file = open("simulation.txt ", "w");
-
+        result_buffer = ''
         for test in self.tests:
             machine_to_run = self.get_available_machine(test)
             latest_resource = self.get_available_resources(test)
 
             time_to_run = max(machine_to_run.available_at, latest_resource.available_at if latest_resource else 0)
-            file.write(test.name + "," + str(time_to_run) + ","  + machine_to_run.name + "\n")
+            result_buffer += test.name + "," + str(time_to_run) + ","  + machine_to_run.name + "\n"
             self.machines[machine_to_run.name].available_at = time_to_run + test.duration
 
             if latest_resource:
                 for resource in test.resources:
                     self.resources[resource].available_at = time_to_run + test.duration
 
-        print 'iteration: ', i, '', max(self.machines[machine].available_at for machine in self.machines)
-        file.close()
-        return max(self.machines[machine].available_at for machine in self.machines)
+        return {
+            "buffer": result_buffer,
+            "makespan": max(self.machines[machine].available_at for machine in self.machines)
+        }
 
 
     def get_available_machine(self, test):

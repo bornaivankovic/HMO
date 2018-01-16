@@ -3,6 +3,8 @@ from machine import Machine
 from resource import Resource
 from greedy import Greedy
 from random import randint
+import time
+from numpy import inf
 
 instances = ["ts" + str(i) + ".txt" for i in range(1, 11)]
 with file(instances[1], "r") as f:
@@ -43,10 +45,23 @@ def generate_test_queue(tests):
     tests[tests_n[1]] = tmp_test
     return test_queue
 
-times = []
-for i in range(1):
+start = time.time()
+
+PERIOD_OF_TIME = 10
+
+makespan = inf
+
+file = open("simulation2.txt ", "w");
+
+print 'Starting simulation!'
+while True:
     test_queue = generate_test_queue(tests)
     simulation = Greedy(machines, resources, test_queue)
-    times.append(simulation.start(i))
+    result = simulation.start()
+    if result['makespan'] < makespan:
+        makespan = result['makespan']
+        file.write(result['buffer'])
+    if time.time() > start + PERIOD_OF_TIME : break
+file.close()
+print "MINSPAN: ", makespan
 
-print "MINSPAN: ", min(times)
