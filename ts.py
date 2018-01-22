@@ -60,6 +60,7 @@ for inter in intervals:
 
         print 'Starting simulation!'
         counter=0
+        counter2=0
         while True:
             test_queue = generate_test_queue(tests)
             simulation = Greedy(machines, resources, test_queue)
@@ -68,10 +69,12 @@ for inter in intervals:
                 makespan = result['makespan']
                 counter=0
             counter+=1
+            counter2+=1
             if time.time() > start + PERIOD_OF_TIME : break
             if inter=="ne" and counter==100: break
 
         out_file.write(result['buffer'])
         out_file.close()
         print "MINSPAN: ", makespan
+        print inter,instanca,counter2
 
